@@ -9,6 +9,5 @@
 Clone the repo and launch Neovim:
 
 ```bash
-git clone https://github.com/andhycoder/nvim ~/.config/nvim
-nvim
+git clone https://github.com/andhycoder/nvim ~/.config/nvim && nvim
 ```
