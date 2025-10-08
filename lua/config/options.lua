@@ -9,3 +9,6 @@ o.softtabstop = 2
 o.shiftwidth = 2
 
 o.swapfile = false
+
+o.scrolloff = 8
+o.sidescrolloff = 8
