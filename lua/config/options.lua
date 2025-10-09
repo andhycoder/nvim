@@ -12,3 +12,27 @@ o.swapfile = false
 
 o.scrolloff = 8
 o.sidescrolloff = 8
+
+o.smartindent = true
+o.hlsearch = true
+o.autoindent = true
+o.expandtab = true
+o.inccommand = "split"
+o.ignorecase = true
+o.smarttab = true
+o.breakindent = true
+o.wrap = false
+vim.opt.backspace = { "start", "eol", "indent" }
+
+o.backup = false
+
+vim.opt.path:append({ "**" })
+vim.opt.wildignore:append({ "*/node_nodules/*" })
+vim.opt.formatoptions:append({ "r" })
+
+o.mouse = "a"
+
+-- o.foldcolumn = "1" -- '0' is not bad
+-- o.foldlevel = 99
+-- o.foldlevelstart = 99
+-- o.foldenable = true
