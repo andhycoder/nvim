@@ -1,0 +1,242 @@
+local M = {}
+
+M.lsp_icons = {
+  gopls = " ",
+  pyright = " ",
+  ts_ls = " ",
+  jdtls = " ",
+  rust_analyzer = " ",
+  terraformls = "󱁢 ",
+  yamlls = " ",
+  lua_ls = " ",
+  copilot = " ",
+}
+
+M.lsp_servers = {
+  gopls = {
+    cmd = { "gopls" },
+    filetypes = { "go", "gomod", "gowork", "gotmpl" },
+    root_markers = { "go.work", "go.mod", ".git" },
+    settings = {
+      gopls = {
+        semanticTokens = true,
+        hints = {
+          assignVariableTypes = true,
+          compositeLiteralFields = true,
+          compositeLiteralTypes = true,
+          constantValues = true,
+          functionTypeParameters = true,
+          parameterNames = true,
+          rangeVariableTypes = true,
+        },
+      },
+    },
+  },
+  pyright = {
+    cmd = { "pyright-langserver", "--stdio" },
+    filetypes = { "python" },
+    root_markers = {
+      "pyproject.toml",
+      "setup.py",
+      "setup.cfg",
+      "requirements.txt",
+      ".git",
+    },
+  },
+  ts_ls = {
+    cmd = { "typescript-language-server", "--stdio" },
+    filetypes = {
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact",
+    },
+    root_markers = { "tsconfig.json", "jsconfig.json", "package.json", ".git" },
+    settings = {
+      javascript = {
+        inlayHints = {
+          includeInlayEnumMemberValueHints = true,
+          includeInlayFunctionLikeReturnTypeHints = true,
+          includeInlayFunctionParameterTypeHints = true,
+          includeInlayParameterNameHints = "all",
+          includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+          includeInlayPropertyDeclarationTypeHints = true,
+          includeInlayVariableTypeHints = true,
+        },
+      },
+      typescript = {
+        inlayHints = {
+          includeInlayEnumMemberValueHints = true,
+          includeInlayFunctionLikeReturnTypeHints = true,
+          includeInlayFunctionParameterTypeHints = true,
+          includeInlayParameterNameHints = "all",
+          includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+          includeInlayPropertyDeclarationTypeHints = true,
+          includeInlayVariableTypeHints = true,
+        },
+      },
+    },
+  },
+  jdtls = {
+    cmd = { "jdtls" },
+    filetypes = { "java" },
+    root_markers = {
+      "pom.xml",
+      "build.gradle",
+      "build.gradle.kts",
+      "settings.gradle",
+      "settings.gradle.kts",
+      ".git",
+    },
+  },
+  rust_analyzer = {
+    cmd = { "rust-analyzer" },
+    filetypes = { "rust" },
+    root_markers = {
+      "Cargo.toml",
+      "rust-toolchain",
+      "rust-toolchain.toml",
+      ".git",
+    },
+    settings = {
+      ["rust-analyzer"] = {
+        cargo = {
+          buildScripts = {
+            enable = true,
+          },
+          allTargets = false,
+        },
+        check = {
+          command = "clippy",
+          extraArgs = {
+            "--no-deps",
+            "--",
+            "-W",
+            "clippy::all",
+            "-D",
+            "clippy::perf",
+            "-W",
+            "clippy::correctness",
+            "-W",
+            "clippy::pedantic",
+            "-W",
+            "clippy::style",
+            "-W",
+            "clippy::nursery",
+            "-W",
+            "clippy::complexity",
+          },
+          allTargets = false,
+        },
+        files = {
+          exclude = { ".git", "target", "node_modules" },
+        },
+        lens = {
+          enable = true,
+        },
+        procMacro = {
+          enable = true,
+        },
+        inlayHints = {
+          bindingModeHints = { enable = false },
+          chainingHints = { enable = true },
+          closingBraceHints = { enable = true, minLines = 25 },
+          closureReturnTypeHints = { enable = "never" },
+          lifetimeElisionHints = { enable = "never", useParameterNames = false },
+          maxLength = 25,
+          parameterHints = { enable = true },
+          reborrowHints = { enable = "never" },
+          renderColons = true,
+          typeHints = {
+            enable = true,
+            hideClosureInitialization = false,
+            hideNamedTempTypes = false,
+          },
+        },
+      },
+    },
+  },
+  lua_ls = {
+    cmd = { "lua-language-server" },
+    filetypes = { "lua" },
+    root_markers = { ".luarc.json", ".luarc.jsonc", ".git" },
+    settings = {
+      Lua = {
+        diagnostics = {
+          globals = { "vim", "MiniIcons", "MiniDiff", "MiniFiles" },
+          disable = { "different-requires" },
+        },
+        runtime = {
+          version = "LuaJIT",
+        },
+        completion = {
+          callSnippet = "Replace",
+        },
+        doc = {
+          privateName = { "^_" },
+        },
+        hint = {
+          enable = true,
+          arrayIndex = "Disable",
+          await = true,
+          paramName = "All",
+          paramType = true,
+          semicolon = "Disable",
+          setType = true,
+        },
+        workspace = {
+          checkThirdParty = false,
+          library = {
+            vim.env.VIMRUNTIME,
+          },
+        },
+        telemetry = { enable = false },
+      },
+    },
+  },
+  terraformls = {
+    cmd = { "terraform-ls", "serve" },
+    filetypes = { "terraform", "terraform-vars", "hcl" },
+    root_markers = { ".terraform", ".git" },
+  },
+  yamlls = {
+    cmd = { "yaml-language-server", "--stdio" },
+    filetypes = { "yaml" },
+    root_markers = { ".git" },
+    settings = {
+      yaml = {
+        keyOrdering = false,
+      },
+    },
+  },
+  clangd = {
+    cmd = { "clangd" },
+    filetypes = { "c", "cpp", "cc" },
+  },
+}
+
+M.formatters_by_ft = {
+  lua = { "stylua" },
+  python = { "black" },
+  sh = { "shfmt" },
+  bash = { "shfmt" },
+  zsh = { "shfmt" },
+  go = { "gofmt" },
+  terraform = { "terraform_fmt" },
+  ["terraform-vars"] = { "terraform_fmt" },
+  java = { "google-java-format" },
+  rust = { "rustfmt" },
+}
+
+M.formatter_binaries = {
+  stylua = "stylua",
+  black = "black",
+  shfmt = "shfmt",
+  gofmt = "gofmt",
+  terraform_fmt = "terraform",
+  google_java_format = "google-java-format",
+  prettier = "prettier",
+  rustfmt = "rustfmt",
+}
+
+return M
