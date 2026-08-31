@@ -193,6 +193,7 @@ function M.setup_blink()
       -- default = { "lsp", "path", "snippets", "buffer" },
       per_filetype = {
         gitcommit = { "snippets", "buffer" },
+        gitignore = { "buffer" },
         markdown = { "buffer", "snippets", "path" },
       },
       providers = {
