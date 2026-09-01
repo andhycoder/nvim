@@ -17,12 +17,29 @@ vim.api.nvim_create_autocmd("VimResized", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
+  desc = "Disable indentscope for certain filetypes",
+  callback = function()
+    local ignore_filetypes = {
+      help = true,
+      checkhealth = true,
+      notify = true,
+      TelescopePrompt = true,
+      dashboard = true,
+      oil = true,
+    }
+
+    if ignore_filetypes[vim.bo.filetype] then
+      vim.b.miniindentscope_disable = true
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
   group = group,
   pattern = { "text", "plaintext", "markdown", "gitcommit" },
   callback = function()
     vim.opt_local.spell = true
     vim.opt_local.spelllang = { "en", "id" }
-    vim.opt_local.wrap = false
   end,
 })
 

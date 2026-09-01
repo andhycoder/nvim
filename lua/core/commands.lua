@@ -1,11 +1,11 @@
 local M = {}
 
 function M.setup()
-  if vim.g.pack_comnands_created then
+  if vim.g.pack_commands_created then
     return
   end
 
-  vim.g.pack_comnands_created = true
+  vim.g.pack_commands_created = true
 
   vim.schedule(function()
     vim.api.nvim_create_user_command("PackSync", function()

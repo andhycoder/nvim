@@ -53,7 +53,7 @@ local function setup_phase_1()
     require("features.interface.theme").setup()
     require("features.interface.icons").setup()
     require("features.interface.statusline").setup()
-    require("features.interface.scope_line").setup()
+    require("features.interface.indentscope").setup()
   end
 
   require("features.editing.completion").setup_blink()
