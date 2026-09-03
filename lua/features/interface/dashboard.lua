@@ -52,9 +52,9 @@ vim.api.nvim_create_autocmd("ColorScheme", {
   end,
 })
 
----@param text_width integer
----@param win_width integer
----@return integer
+--- @param text_width integer
+--- @param win_width integer
+--- @return integer
 local function padding_for(text_width, win_width)
   return math.max(0, math.floor((win_width - text_width) / 2))
 end
@@ -166,8 +166,8 @@ function M.setup()
   vim.api.nvim_buf_clear_namespace(bufnr, dashboard_ns, 0, -1)
 
   -- Uses the pre-built lines table to avoid get_lines round-trips
-  ---@param row number
-  ---@param hl string
+  --- @param row number
+  --- @param hl string
   local function hl_full_row(row, hl)
     local col_end = #lines[row + 1]
     if col_end == 0 then
@@ -179,10 +179,10 @@ function M.setup()
     })
   end
 
-  ---@param row number
-  ---@param c0 number
-  ---@param c1 number
-  ---@param hl string
+  --- @param row number
+  --- @param c0 number
+  --- @param c1 number
+  --- @param hl string
   local function hl_range(row, c0, c1, hl)
     local col_end = (c1 == -1) and #lines[row + 1] or c1
     vim.api.nvim_buf_set_extmark(bufnr, dashboard_ns, row, c0, {

@@ -13,6 +13,7 @@ M.required = {
   "vim",
   "vimdoc",
   "git_rebase",
+  "gitcommit",
   "diff",
   "markdown",
   "markdown_inline",

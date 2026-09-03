@@ -50,6 +50,7 @@ vim.api.nvim_create_autocmd("FileType", {
     "checkhealth",
     "help",
     "oil",
+    "git",
   },
   callback = function(ev)
     vim.bo[ev.buf].buflisted = false

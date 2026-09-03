@@ -2,7 +2,6 @@ local set = vim.opt
 
 -- Ui
 set.number = true
-set.numberwidth = 2
 set.relativenumber = false
 set.signcolumn = "yes"
 set.cursorline = true

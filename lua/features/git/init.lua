@@ -5,7 +5,7 @@ function M.setup()
   vim.keymap.set(
     { "n", "x" },
     "<leader>gs",
-    "<cmd>Git<cr>",
+    "<cmd>Git status<cr>",
     { desc = "Git status" }
   )
   vim.keymap.set(
@@ -17,7 +17,7 @@ function M.setup()
 
   require("mini.diff").setup {
     view = {
-      style = "sign",
+      style = "number",
       signs = { add = "┃", change = "┊", delete = "-" },
     },
   }

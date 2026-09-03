@@ -43,6 +43,9 @@ function M.setup_blink()
   require("blink.cmp").build():wait()
 
   require("blink.cmp").setup {
+    enabled = function()
+      return not vim.tbl_contains({ "oil" }, vim.bo.filetype)
+    end,
     snippets = {
       preset = "default",
     },
