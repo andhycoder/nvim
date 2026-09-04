@@ -58,6 +58,7 @@ local function setup_phase_1()
 
   require("features.editing.completion").setup_blink()
   require("features.lsp").setup()
+  require("features.lsp.lang.rust").setup()
   require("infra.treesitter").setup()
   require("features.editing.files").setup()
   require("features.editing.pairs").setup()

@@ -9,37 +9,43 @@ function M.check()
 
   for _, plugin in ipairs(plugins) do
     local name = plugin.spec.name or plugin.spec.src
-    io.write(string.format(" 󰆓 %-20s", name))
-    io.flush()
 
-    vim.system({ "git", "-C", plugin.path, "fetch", "origin", "--quiet" }):wait()
-
-    local branch = git.get_default_branch(plugin.path)
-    local local_rev = vim
-      .system({ "git", "-C", plugin.path, "rev-parse", "HEAD" }, { text = true })
-      :wait().stdout
-      :gsub("\n", "")
-    local remote_rev = vim
-      .system(
-        { "git", "-C", plugin.path, "rev-parse", "origin/" .. branch },
-        { text = true }
-      )
-      :wait().stdout
-      :gsub("\n", "")
-
-    if local_rev ~= remote_rev then
-      vim.notify(
-        string.format(" → pending update (%s)", branch),
-        vim.log.levels.INFO
-      )
-      table.insert(results, {
-        plugin = plugin,
-        branch = branch,
-        local_rev = local_rev,
-        remote_rev = remote_rev,
-      })
+    -- If the plugin has a version pin from the registry, skip git checks
+    if plugin.spec and plugin.spec.version then
+      vim.notify(" → skipped: pinned to " .. tostring(plugin.spec.version), vim.log.levels.INFO)
     else
-      vim.notify(" → up to date", vim.log.levels.INFO)
+      io.write(string.format(" 󰆓 %-20s", name))
+      io.flush()
+
+      vim.system({ "git", "-C", plugin.path, "fetch", "origin", "--quiet" }):wait()
+
+      local branch = git.get_default_branch(plugin.path)
+      local local_rev = vim
+        .system({ "git", "-C", plugin.path, "rev-parse", "HEAD" }, { text = true })
+        :wait().stdout
+        :gsub("\n", "")
+      local remote_rev = vim
+        .system(
+          { "git", "-C", plugin.path, "rev-parse", "origin/" .. branch },
+          { text = true }
+        )
+        :wait().stdout
+        :gsub("\n", "")
+
+      if local_rev ~= remote_rev then
+        vim.notify(
+          string.format(" → pending update (%s)", branch),
+          vim.log.levels.INFO
+        )
+        table.insert(results, {
+          plugin = plugin,
+          branch = branch,
+          local_rev = local_rev,
+          remote_rev = remote_rev,
+        })
+      else
+        vim.notify(" → up to date", vim.log.levels.INFO)
+      end
     end
   end
 
@@ -52,16 +58,21 @@ function M.apply(updates)
     return
   end
   for _, update in ipairs(updates) do
-    vim
-      .system({
-        "git",
-        "-C",
-        update.plugin.path,
-        "checkout",
-        "--quiet",
-        "origin/" .. update.branch,
-      })
-      :wait()
+    local plugin = update.plugin
+    if plugin.spec and plugin.spec.version then
+      vim.notify(" → skipping '" .. (plugin.spec.name or plugin.spec.src) .. "' (registry version)", vim.log.levels.INFO)
+    else
+      vim
+        .system({
+          "git",
+          "-C",
+          plugin.path,
+          "checkout",
+          "--quiet",
+          "origin/" .. update.branch,
+        })
+        :wait()
+    end
   end
 end
 

@@ -10,6 +10,7 @@ M.phase1 = {
   { source = "rafamadriz/friendly-snippets" },
   { source = "saghen/blink.lib" },
   { source = "saghen/blink.cmp" },
+  { source = "mrcjkb/rustaceanvim", version = vim.version.range("^9") },
 }
 
 M.phase2 = {

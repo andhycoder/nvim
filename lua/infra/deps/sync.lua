@@ -75,33 +75,39 @@ function M.run()
   vim.notify("󰚰 Checking remote plugin states...", vim.log.levels.INFO)
   for _, plugin in ipairs(plugins) do
     local name = plugin.spec.name or plugin.spec.src
-    print("  Fetching " .. name .. "...")
-    vim.system({ "git", "-C", plugin.path, "fetch", "origin", "--quiet" }):wait()
-
-    local branch = git.get_default_branch(plugin.path)
-    local local_rev = vim
-      .system({ "git", "-C", plugin.path, "rev-parse", "HEAD" }, { text = true })
-      :wait().stdout
-      :gsub("\n", "")
-    local remote_rev = vim
-      .system(
-        { "git", "-C", plugin.path, "rev-parse", "origin/" .. branch },
-        { text = true }
-      )
-      :wait().stdout
-      :gsub("\n", "")
 
     table.insert(lines, "## " .. name)
-    table.insert(lines, "Branch: `" .. branch .. "`")
-    if local_rev ~= remote_rev then
-      table.insert(lines, "Status: ⚠️ **Pending Update**")
-      table.insert(lines, "Current revision: `" .. local_rev .. "`")
-      table.insert(lines, "Remote revision:  `" .. remote_rev .. "`")
-      local commits, total = commits_between(plugin.path, local_rev, remote_rev)
-      append_commit_summary(lines, commits, total)
+    if plugin.spec.version then
+      table.insert(lines, "Status: 📌 **Pinned by registry (`version`)**")
+      table.insert(lines, "Target version: `" .. tostring(plugin.spec.version) .. "`")
     else
-      table.insert(lines, "Status: ✅ **Up to date**")
-      table.insert(lines, "Revision: `" .. local_rev .. "`")
+      print("  Fetching " .. name .. "...")
+      vim.system({ "git", "-C", plugin.path, "fetch", "origin", "--quiet" }):wait()
+
+      local branch = git.get_default_branch(plugin.path)
+      local local_rev = vim
+        .system({ "git", "-C", plugin.path, "rev-parse", "HEAD" }, { text = true })
+        :wait().stdout
+        :gsub("\n", "")
+      local remote_rev = vim
+        .system(
+          { "git", "-C", plugin.path, "rev-parse", "origin/" .. branch },
+          { text = true }
+        )
+        :wait().stdout
+        :gsub("\n", "")
+
+      table.insert(lines, "Branch: `" .. branch .. "`")
+      if local_rev ~= remote_rev then
+        table.insert(lines, "Status: ⚠️ **Pending Update**")
+        table.insert(lines, "Current revision: `" .. local_rev .. "`")
+        table.insert(lines, "Remote revision:  `" .. remote_rev .. "`")
+        local commits, total = commits_between(plugin.path, local_rev, remote_rev)
+        append_commit_summary(lines, commits, total)
+      else
+        table.insert(lines, "Status: ✅ **Up to date**")
+        table.insert(lines, "Revision: `" .. local_rev .. "`")
+      end
     end
     table.insert(lines, "")
   end
